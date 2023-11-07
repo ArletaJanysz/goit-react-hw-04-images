@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Searchbar from '../Searchbar/Searchbar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Button from '../Button/Button';
@@ -20,7 +20,7 @@ export function App() {
     setPage(1);
   };
 
-  const fetchImages = useEffect(() => {
+  const fetchImages = useCallback(() => {
     const apiKey = '39307945-e2807d203f602e849866feaef';
     const perPage = 12;
     setLoading(true);
@@ -29,10 +29,10 @@ export function App() {
     )
       .then(response => response.json())
       .then(data => {
-        setImages([...images, ...data.hits]);
+        setImages(prevImages => [...prevImages, ...data.hits]);
         setLoading(false);
       });
-  }, [images, page, query]);
+  }, [query, page]);
 
   const loadMoreImages = () => {
     const nextPage = page + 1;
